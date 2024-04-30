@@ -1,0 +1,23 @@
+<div class="background-image">
+    <section class="chat">
+        <div class="card w-50 h-50">
+            <h5 class="card-title text-center titulo">Chat de usuarios</h5>
+            <div class="card-body" id="card-body">
+            <p *ngFor="let mensaje of mensajesTraidos" class="p-2 mensajes" [ngClass]="usuario?.idUsuario == mensaje.usuario?.idUsuario ? 'mensaje-enviado': 'mensaje-recibido'">
+                <span [ngClass]="usuario?.idUsuario == mensaje.usuario?.idUsuario ? 'email-1' : 'email-2'">{{ mensaje.usuario?.nombre }}</span>
+                <br />
+                {{ mensaje.mensaje }} <br />
+                <span class="fecha">{{ mensaje.fecha }}</span>
+            </p>
+        </div>
+            <form class="card-footer text-muted input-group">
+                <input type="text" class="form-control" placeholder="Ingrese su mensaje..." [(ngModel)]="mensajeAEnviar" [ngModelOptions]="{ standalone: true }">
+                <div class="input-group-append" (click)="EnviarMensaje()">
+                    <span class="input-group-text btn-enviar" id="basic-addon2">
+                        <img class="img-responsive" src="../../../assets/iconos/send.png" alt="enviar">
+                    </span>
+                </div>
+            </form>
+        </div>
+    </section>
+</div>

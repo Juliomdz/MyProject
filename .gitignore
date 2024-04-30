@@ -36,6 +36,9 @@ yarn-error.log
 /libpeerconnection.log
 testem.log
 /typings
+/app/environment
+/src/assets/fondos/old
+/src/assets/iconos/old
 
 # System files
 .DS_Store
