@@ -1,34 +1,46 @@
 <nav class="navbar navbar-expand-lg">
-    <div class="container-fluid">
-      <a class="navbar-brand" routerLink="/home">
-          <img src="../../../assets/favicon.ico" alt="Favicon" class="favicon d-inline-block align-text-top" style="height: 40px;">
-          <span class="nombre" *ngIf="usuario">{{usuario?.nombre}}</span>
-      </a>
-      <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-          <ul class="navbar-nav">
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" routerLinkActive="active" routerLinkActive="router-link-active" [routerLink]="['/home']">Inicio</a>
-            </li>
-            <li class="nav-item">
-              <a *ngIf="usuario" class="nav-link active" aria-current="page" routerLinkActive="active" routerLinkActive="router-link-active" [routerLink]="['/juegos']">Juegos</a>
-            </li>
-            <li class="nav-item dropdown-center" *ngIf="!usuario">
-              <a class="nav-link" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Usuarios
-              </a>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item" [routerLink]="['auth/login']">Iniciar sesión</a></li>
-                <li><a class="dropdown-item" [routerLink]="['auth/register']">Registrarse</a></li>
-              </ul>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active" [routerLink]="['/home/aboutme']">¿Quien soy?</a>
-            </li>
+  <div class="container-fluid">
+    <a class="navbar-brand" [routerLink]="['/home']">
+      <img src="../../../assets/favicon.ico" alt="Favicon" class="favicon d-inline-block align-text-top"
+        style="height: 40px; padding-right: 10px;">
+      <span class="nombre" *ngIf="usuario">{{usuario?.nombre}}</span>
+    </a>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" routerLinkActive="active" routerLinkActive="router-link-active"
+            [routerLink]="['/home']">Inicio</a>
+        </li>
+        <li class="nav-item">
+          <a *ngIf="usuario" class="nav-link active" aria-current="page" routerLinkActive="active"
+            routerLinkActive="router-link-active" [routerLink]="['/juegos']">Juegos</a>
+        </li>
+        <li class="nav-item dropdown-center" *ngIf="!usuario">
+          <a class="nav-link" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Usuarios
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" [routerLink]="['auth/login']">Iniciar sesión</a></li>
+            <li><a class="dropdown-item" [routerLink]="['auth/register']">Registrarse</a></li>
           </ul>
-      </div>  
-      <button *ngIf="usuario" class="btn" (click)="CerrarSesion()">Cerrar Sesion</button>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" [routerLink]="['/aboutme']">¿Quien soy?</a>
+        </li>
+      </ul>
+      <form class="d-flex" *ngIf="usuario">
+        <button class="btn chat-icon" type="submit" (click)="MostrarChat()">
+          <img src="../../../assets/iconos/chat.png"  width="40" height="40" alt="chat">
+        </button>
+        <button class="btn chat-icon" (click)="CerrarSesion()">
+          <img src="../../../assets/iconos/logout.png"  width="40" height="40" alt="logout">
+        </button>
+      </form>
+    </div>
   </div>
 </nav>
+
+<app-chat [abierto]="chatActivado"></app-chat>
 
 <section>
   <ng-content select="router-outlet"></ng-content>

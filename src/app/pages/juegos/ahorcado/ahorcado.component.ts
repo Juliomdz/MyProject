@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { SwalService } from 'src/app/services/swal.service';
+import * as moment from 'moment';
+import { FirestoreService } from 'src/app/services/firestore.service';
 import { ToastifyService } from 'src/app/services/toastify.service';
 import { UserService } from 'src/app/services/user.service';
 
@@ -10,8 +11,8 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class AhorcadoComponent {
 
-  user: any = null;
-  buttonLetters: string[] = [
+  usuario:any;
+  letras: string[] = [
     'A',
     'B',
     'C',
@@ -42,123 +43,122 @@ export class AhorcadoComponent {
   ];
   listOfWords: string[] = [
     'PERRO',
-    'SERPIENTE',
-    'KOALA',
     'SAPO',
-    'GATO'
+    'GATO',
+    'MARCA',
+    'COLGADO',
+    'EMPRESA',
+    'CURSO',
+    'SOFTWARE',
+    'LENGUAJE'
   ];
-  victory: boolean = false;
-  activeGame: boolean = true;
-  attempts: number = 6;
-  score: number = 0;
+  victoria: boolean = false;
+  juegoActivado: boolean = true;
+  intentos: number = 6;
+  puntuacion: number = 0;
   imagen: number | any = 0;
-  word: string = '';
-  hyphenatedWord: string[] = [];
+  palabra: string = '';
+  palabraSeleccionada: string[] = [];
+  botonReinicio = 'JUGAR OTRA'
 
   constructor(
     private toastService: ToastifyService,
-    public loginService: UserService,
-    private swalService: SwalService) 
+    public userService: UserService,
+    private firestore:FirestoreService) 
     { }
 
   ngOnInit(): void {
-    this.word =
-    this.listOfWords[
-    Math.round(Math.random() * (this.listOfWords.length - 1))
-    ];
-    this.hyphenatedWord = Array(this.word.length).fill('_');
+    this.userService.user$.subscribe(user => {
+      if(user)
+      {
+        this.usuario = user
+      }
+    })
+    this.palabra = this.listOfWords[Math.round(Math.random() * (this.listOfWords.length - 1))];
+    this.palabraSeleccionada = Array(this.palabra.length).fill('_');
   }
 
   restartGame() {
-    this.word =
-      this.listOfWords[
-      Math.round(Math.random() * (this.listOfWords.length - 1))
-      ];
-    this.hyphenatedWord = Array(this.word.length).fill('_');
-    this.activeGame = true;
-    this.attempts = 6;
-    this.score = 0;
-    this.imagen = 0;
-    this.victory = false;
-    this.resetClassBotones();
-    this.toastService.showInfo('Reiniciando partida...', 'Ahorcado');
-  } // end of restartGame
-
-  resetClassBotones() {
-    for (let index = 0; index < this.buttonLetters.length; index++) {
-      const elemento = document.getElementById("boton" + index) as HTMLButtonElement;
-      elemento?.classList.remove("btn-error");
-      elemento?.classList.remove("btn-acierto");
-      elemento?.classList.add("btn-letra");
-      if (elemento != null) {
-        elemento.disabled = false;
-      }
+    this.palabra =this.listOfWords[Math.round(Math.random() * (this.listOfWords.length - 1))];
+    this.palabraSeleccionada = Array(this.palabra.length).fill('_');
+    this.juegoActivado = true;
+    this.intentos = 6;
+    if(this.puntuacion == 0)
+    {
+      this.puntuacion = 0
     }
+    this.imagen = 0;
+    this.victoria = false;
+    this.toastService.showInfo('Juego reiniciado', 'Ahorcado');
   }
 
-  sendLetter(letter: string, idDelBoton: number) {
-    let letterFlag: boolean = false;
-    let winGame: boolean = false;
+  sendLetter(letraSeleccionada: string) {
+    let banderaLetra: boolean = false;
+    let gano: boolean = false;
 
-    if (this.activeGame) {
-      const alreadyGuessedLetterFlag: boolean = this.hyphenatedWord.some(
-        (c) => c === letter
+    if (this.juegoActivado) {
+      const letraYaSeleccionada: boolean = this.palabraSeleccionada.some(
+        (c) => c === letraSeleccionada
       );
-      for (let i = 0; i < this.word.length; i++) {
-        const wordLetter = this.word[i];
-        if (wordLetter === letter && !alreadyGuessedLetterFlag) {
-          this.hyphenatedWord[i] = letter;
-          letterFlag = true;
-          this.score++;
-          winGame = this.hyphenatedWord.some((hyphen) => hyphen == '_');
-          if (!winGame) {
+      for (let i = 0; i < this.palabra.length; i++) {
+        const letraPalabra = this.palabra[i];
+        if (letraPalabra === letraSeleccionada && !letraYaSeleccionada) {
+          this.palabraSeleccionada[i] = letraSeleccionada;
+          banderaLetra = true;
+          this.puntuacion++;
+          gano = this.palabraSeleccionada.some((guion) => guion == '_');
+          if (!gano) {
             this.imagen = this.imagen + '_vic';
-            this.activeGame = false;
-            this.victory = true;
-            this.toastService.showSuccess('Excelente Ganaste!!', 'Ahorcado');
+            this.juegoActivado = false;
+            this.victoria = true;
+            this.toastService.showSuccess('Desea jugar de vuelta?', 'GANASTE');
+            this.CrearResultado();
             break;
           }
         }
       }
 
-      if (!letterFlag && !alreadyGuessedLetterFlag) {
-        if (this.attempts > 0) {
-          this.attempts--;
+      if (!banderaLetra && !letraYaSeleccionada) {
+        if (this.intentos > 0) {
+          this.intentos--;
           this.imagen++;
-          this.toastService.showError('¡Te equivocaste!', 'Ahorcado');
-          const elemento = document.getElementById("boton" + idDelBoton) as HTMLButtonElement;
-          elemento?.classList.remove("btn-letra");
-          elemento?.classList.add("btn-error");
-          if (elemento != null) {
-            elemento.disabled = true;
-          }
-          if (this.attempts === 0) {
-            this.toastService.showError('Mejor suerte la proxima. Perdiste.', 'Ahorcado');
-            this.activeGame = false;
+          this.toastService.showError('¡NO adivinaste!', 'Ahorcado');
+          if (this.intentos === 0) {
+            this.toastService.showError('PERDISTE', 'Ahorcado');
+            this.botonReinicio = 'REINICIAR JUEGO'
+            this.juegoActivado = false;
+            this.CrearResultado();
           }
         }
 
-        if (this.score > 0) {
-          this.score--;
+        if (this.puntuacion > 0) {
+          this.puntuacion--;
         }
-      } else if (alreadyGuessedLetterFlag) {
-        this.toastService.showWarning('Esta letra ya fue utilizada', 'Ahorcado');
-      } else if (letterFlag) {
-        if (!this.victory) {
-          this.toastService.showSuccess('Acertaste!!', 'Ahorcado');
-          const elemento = document.getElementById("boton" + idDelBoton) as HTMLButtonElement;
-          elemento?.classList.remove("btn-letra");
-          elemento?.classList.add("btn-acierto");
-          if (elemento != null) {
-            elemento.disabled = true;
-          }
+      } else if (letraYaSeleccionada) {
+        this.toastService.showWarning('La letra ya fue adivinada', 'Ahorcado');
+      } else if (banderaLetra) {
+        if(!this.victoria) {
+          this.toastService.showSuccess('¡Adivinaste!', 'Ahorcado');
         }
       }
     } else {
-      this.toastService.showWarning(
-        '¿Quieres volver a jugar?',
-        'Ahorcado', 'warning'
+      this.toastService.showInfo(
+        '¿Quieres seguir jugando?, reinicia el juego!',
+        'Ahorcado'
       );
     }
+  }
+
+  CrearResultado()
+  {
+    const resultado = {
+      juego:'Ahorcado',
+      puntaje: this.puntuacion,
+      usuario: this.usuario,
+      victoria:this.victoria,
+      fecha:moment(new Date()).format('DD-MM-YYYY HH:mm:ss')
+    }
+
+    this.firestore.guardarResultado(resultado)
   }
 }

@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
 import { SwalService } from 'src/app/services/swal.service';
 import { ToastifyService } from 'src/app/services/toastify.service';
-import { Toast } from 'ngx-toastr';
+import { FirestoreService } from 'src/app/services/firestore.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-mayor-menor',
@@ -10,13 +11,13 @@ import { Toast } from 'ngx-toastr';
   styleUrls: ['./mayor-menor.component.scss']
 })
 export class MayorMenorComponent {
-  user: any = null;
-  startButtonText: string = 'Comenzar Juego';
-  victory: boolean = false;
-  activeGame: boolean = false;
-  gameOver: boolean = false;
-  textGameOver: string = '¡PERDISTE!';
-  cardImage: string = '/assets/mayor menor/blanca.jpg';
+  usuario: any = null;
+  botonJuego: string = 'Comenzar Juego';
+  victoria: boolean = false;
+  juegoActivado: boolean = false;
+  juegoFinalizado: boolean = false;
+  textoJuegoFinalizado: string = '¡PERDISTE!';
+  imagenCarta: string = '../../../../assets/mayor-menor/blanca.png';
   cardList: any = [
     { type: 'trebol', number: 1 },
     { type: 'trebol', number: 2 },
@@ -57,71 +58,64 @@ export class MayorMenorComponent {
     { type: 'corazon', number: 11 },
     { type: 'corazon', number: 12 },
     { type: 'corazon', number: 13 },
-    { type: 'pica', number: 1 },
-    { type: 'pica', number: 2 },
-    { type: 'pica', number: 3 },
-    { type: 'pica', number: 4 },
-    { type: 'pica', number: 5 },
-    { type: 'pica', number: 6 },
-    { type: 'pica', number: 7 },
-    { type: 'pica', number: 8 },
-    { type: 'pica', number: 9 },
-    { type: 'pica', number: 10 },
-    { type: 'pica', number: 11 },
-    { type: 'pica', number: 12 },
-    { type: 'pica', number: 13 },
   ];
-  cardsToGuess: any = [];
-  score: number = 0;
-  attempts: number = 10;
+  cartasAAdivinar: any = [];
+  puntuacion: number = 0;
+  intentos: number = 10;
   currentCard: any = null;
   currentNumber: number = 0;
-  currentIndex: number = 0;
+  indiceActual: number = 0;
 
   constructor(
     private notifyService: ToastifyService,
-    public loginService:UserService,
+    public userService:UserService,
     private swalService:SwalService,
+    private firestore:FirestoreService
   ) {}
 
   ngOnInit(): void {
-
+    this.userService.user$.subscribe(user => {
+      if(user)
+      {
+        this.usuario = user
+      }
+    })
   }
 
-  startGame() {
-    this.attempts = 10;
-    this.victory = false;
-    this.activeGame = true;
-    this.gameOver = false;
-    this.textGameOver = '¡PERDISTE!';
-    this.score = 0;
-    this.currentIndex = 0;
-    this.startButtonText = 'Reiniciar Juego';
+  IniciarJuego() {
+    this.intentos = 10;
+    this.victoria = false;
+    this.juegoActivado = true;
+    this.juegoFinalizado = false;
+    this.textoJuegoFinalizado = '¡PERDISTE!';
+    this.puntuacion = 0;
+    this.indiceActual = 0;
+    this.botonJuego = 'Reiniciar Juego';
     this.cardList.sort(() => Math.random() - 0.5);
-    this.cardsToGuess = this.cardList.slice(0, 11);
-    this.currentCard = this.cardsToGuess[this.currentIndex];
+    this.cartasAAdivinar = this.cardList.slice(0, 11);
+    this.currentCard = this.cartasAAdivinar[this.indiceActual];
     this.currentNumber = this.currentCard.number;
-    this.cardImage = `/assets/mayor-menor/${this.currentCard.type}_${this.currentCard.number}.jpg`;
+    this.imagenCarta = `/assets/mayor-menor/${this.currentCard.type}_${this.currentCard.number}.png`;
   }
 
-  playMayorMenor(mayorMenor: string) {
+  DeterminarMayorMenor(mayorMenor: string) {
     const previousNumber: number = this.currentNumber;
-    this.currentIndex++;
-    this.attempts--;
-    this.currentCard = this.cardsToGuess[this.currentIndex];
+    this.indiceActual++;
+    this.intentos--;
+    this.currentCard = this.cartasAAdivinar[this.indiceActual];
     this.currentNumber = this.currentCard.number;
-    this.cardImage = `/assets/mayor-menor/${this.currentCard.type}_${this.currentCard.number}.jpg`;
+    this.imagenCarta = `/assets/mayor-menor/${this.currentCard.type}_${this.currentCard.number}.png`;
 
     switch (mayorMenor) {
       case 'menor':
         if (previousNumber > this.currentNumber) {
-          this.score++;
+          this.puntuacion++;
           this.notifyService.showSuccess(
             '¡Muy bien, es MENOR!',
             'Mayor o Menor'
           );
         } else if (previousNumber === this.currentNumber) {
-          this.attempts++;
+          this.intentos++;
           this.notifyService.showInfo('Las cartas son iguales', 'Mayor o Menor');
         } else {
           this.notifyService.showError('No acertaste', 'Mayor o Menor');
@@ -129,13 +123,13 @@ export class MayorMenorComponent {
         break;
       case 'mayor':
         if (previousNumber < this.currentNumber) {
-          this.score++;
+          this.puntuacion++;
           this.notifyService.showSuccess(
             '¡Muy bien, es MAYOR!',
             'Mayor o Menor'
           );
         } else if (previousNumber === this.currentNumber) {
-          this.attempts++;
+          this.intentos++;
           this.notifyService.showInfo('Las cartas son iguales', 'Mayor o Menor');
         } else {
           this.notifyService.showError('No acertaste', 'Mayor o Menor');
@@ -143,16 +137,29 @@ export class MayorMenorComponent {
         break;
     }
 
-    if (this.currentIndex === 10) {
-      this.activeGame = false;
-      this.gameOver = true;
-      if (this.score >= 5) {
-        this.victory = true;
-        this.textGameOver = '¡GANASTE!';
-        this.swalService.MostrarExito("EXCELENTE","Felicidades, ganaste!");
+    if (this.indiceActual === 10) {
+      this.juegoActivado = false;
+      this.juegoFinalizado = true;
+      if (this.puntuacion >= 3) {
+        this.victoria = true;
+        this.textoJuegoFinalizado = '¡GANASTE!';
+        this.swalService.MostrarExito("GANASTE","Has ganado: " + this.puntuacion + " puntos!");
       } else {
-        this.swalService.MostrarError("PERDISTE","Vuelve a intentarlo");
+        this.swalService.MostrarError("PERDISTE","No conseguiste un minimo de 3 puntos!");
       }
+      this.CrearResultado();
     }
+  }
+
+  CrearResultado() {
+    let resultado = {
+      juego:'MayorMenor',
+      puntaje: this.puntuacion,
+      usuario: this.usuario,
+      victoria:this.victoria,
+      fecha:moment(new Date()).format('DD-MM-YYYY HH:mm:ss')
+    }
+
+    this.firestore.guardarResultado(resultado);
   }
 }

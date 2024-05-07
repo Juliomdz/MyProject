@@ -1,4 +1,4 @@
-import { Component, OnInit,} from '@angular/core';
+import { Component, OnInit,Output,EventEmitter} from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
 import Swal from 'sweetalert2';
 
@@ -10,6 +10,9 @@ import Swal from 'sweetalert2';
 export class NavbarComponent implements OnInit {
 
   usuario:any = null
+  chatActivado = false;
+  @Output() ActivarChat = new EventEmitter<boolean>();
+
   constructor(public userService: UserService) { }
 
   ngOnInit() {
@@ -36,11 +39,18 @@ export class NavbarComponent implements OnInit {
       icon:"question"
     }).then((res) => {
       if(res.isConfirmed){
+        this.chatActivado = false
         this.userService.SignOut()
       }
       else{
         Swal.fire('Se cancelo la operación', '', 'info')
       }
     })
+  }
+
+  MostrarChat()
+  {
+    this.chatActivado = !this.chatActivado;
+    this.ActivarChat.emit(this.chatActivado)
   }
 }

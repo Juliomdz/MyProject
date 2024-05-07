@@ -1,5 +1,14 @@
 {
   "projects": {
     "default": "juliomendezlabiv"
+  },
+  "targets": {
+    "juliomendezlabiv": {
+      "hosting": {
+        "Juegoteca": [
+          "juliomendezlabiv"
+        ]
+      }
+    }
   }
 }

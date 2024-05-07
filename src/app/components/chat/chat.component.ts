@@ -1,4 +1,4 @@
-import { Component} from '@angular/core';
+import { Component, Input} from '@angular/core';
 import { ChatService } from '../../services/chat.service';
 import { UserService } from 'src/app/services/user.service';
 import { SwalService } from 'src/app/services/swal.service';
@@ -12,6 +12,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./chat.component.scss']
 })
 export class ChatComponent {
+
+  @Input() abierto:boolean = false
   usuario:any = null
   mensajesTraidos: any[] = []
   mensajeAEnviar = ""
@@ -45,7 +47,7 @@ export class ChatComponent {
       const mensaje = {
         usuario:this.usuario,
         mensaje:this.mensajeAEnviar,
-        fecha:moment().format('MMMM Do YYYY, h:mm:ss a')
+        fecha:moment(new Date()).format('DD-MM-YYYY HH:mm:ss')
       }
   
       this.chatService.GuardarChat(mensaje);

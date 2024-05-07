@@ -22,6 +22,7 @@ import { RouterModule } from '@angular/router';
   ],
   exports:[
     NavbarComponent,
+    ChatComponent,
   ],
 })
 export class ComponentsModule { }

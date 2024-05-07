@@ -14,6 +14,7 @@ export class UserService {
 
   user$: Observable<any>;
   seLogueo:boolean = false;
+  esAdmin:boolean = false;
 
   constructor(private swal:SwalService,
     private router:Router,
@@ -36,15 +37,16 @@ export class UserService {
 
   async Login({email,clave}:any)
   {
-    return await this.afAuth.signInWithEmailAndPassword(email,clave)
+    return this.afAuth.signInWithEmailAndPassword(email,clave)
   }
 
   SignOut()
   {
     this.afAuth.signOut().then(() =>{
       this.seLogueo = false;
+      this.esAdmin = false;
       this.swal.MostrarExito("Seras redirigido...","Se ha cerrado la sesion con exito!").then(() => {
-        this.router.navigate(['home'])
+        this.router.navigate([''])
       })
     }).catch((error) => {
       this.swal.MostrarError("¡Se produjo un error!",this.ObtenerMensajeError(error.errorCode))
@@ -52,36 +54,24 @@ export class UserService {
     })
   }
 
-  RegistrarUsuario(usuario:any)
+  async RegistrarUsuario(usuario:any)
   {
-      this.afAuth.createUserWithEmailAndPassword(usuario.email,usuario.clave).then((data) =>{
+      await this.afAuth.createUserWithEmailAndPassword(usuario.email,usuario.clave).then((data) =>{
         this.afStore.collection('usuarios').doc(data.user?.uid).set({
         idUsuario: data.user?.uid,
         nombre:usuario.nombre,
         email:usuario.email,
-        registradoEn:moment().format('MMMM Do YYYY, h:mm:ss a'),
+        registradoEn:moment(new Date()).format('DD-MM-YYYY HH:mm:ss'),
         rol:"Usuario"
-      }).then(() => {
-        usuario.idUsuario = data.user?.uid
-        this.CrearLogUsuario(usuario).then(() => {
-          this.swal.MostrarExito("¡Has sido registrado!","Seras redirigido al inicio").then(() =>{
-            this.router.navigate([''])
-          })
-        })
       })
     }).catch((error) => {
       this.swal.MostrarError("¡ERROR!",this.ObtenerMensajeError(error.errorCode))
     })
   }
 
-  CrearLogUsuario(usuario:any)
+  GuardarLogUsuario(data:any)
   {
-    const data = {
-      usuario: usuario,
-      fechaIngreso: moment().format('MMMM Do YYYY, h:mm:ss a')
-    };
-
-    return this.afStore.collection("logsusuarios").add(data);
+    return this.afStore.collection("RegistroIngresos").add(data);
   }
 
   ObtenerMensajeError(errorCode: string): string {
@@ -95,11 +85,14 @@ export class UserService {
       case 'auth/email-already-in-use':
         mensaje = 'El email ya está registrado.';
         break;
+      case 'auth/user-not-found':
+        mensaje = 'El usuario no existe.';
+        break;
       case 'auth/invalid-email':
         mensaje = 'El email no es valido.';
         break;
-      case 'auth/user-not-found':
-        mensaje = 'No se encontro el usuario';
+      case 'auth/wrong-password':
+        mensaje = 'La contraseña es inválida';
         break;
       default:
         mensaje = 'Se produjo un error';

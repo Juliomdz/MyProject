@@ -3,6 +3,7 @@ import { FormBuilder,FormGroup, Validators,AbstractControl } from '@angular/form
 import { UserService } from 'src/app/services/user.service';
 import { SwalService } from 'src/app/services/swal.service';
 import { Router } from '@angular/router';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-register',
@@ -17,7 +18,7 @@ export class RegisterComponent implements OnInit {
   ngOnInit(): void {
     this.angularFireAuth.user$.subscribe((user:any) =>{
       if(user){
-        this.usuario = user
+        this.router.navigate([''])
       }
     });
   }
@@ -30,10 +31,18 @@ export class RegisterComponent implements OnInit {
     });
   }
 
-  Registro()
+  async Registro()
   {
     const user = this.formRegister.value
-    this.angularFireAuth.RegistrarUsuario(user)
+    this.angularFireAuth.RegistrarUsuario(user).then(() => {
+      this.angularFireAuth.user$.subscribe((user) => {
+        if (user) {
+          this.usuario = user;
+          this.CrearLogUsuario();
+        }
+      })
+      this.swal.MostrarExito("EXITO","¡Has sido registrado con exito!")
+    })
   }
 
   private ValidadorEspacio(control: AbstractControl): null | object {
@@ -41,5 +50,16 @@ export class RegisterComponent implements OnInit {
     const spaces = nombre.includes(' ');
 
     return spaces ? { containsSpaces: true } : null; 
+  }
+
+  
+  CrearLogUsuario()
+  {
+    const log= {
+      fecha:moment(new Date()).format('DD-MM-YYYY HH:mm:ss'),
+      usuario: this.usuario
+    }
+
+    this.angularFireAuth.GuardarLogUsuario(log)
   }
 }

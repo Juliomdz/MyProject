@@ -1,166 +1,134 @@
-.ahorcado-container {
-    font-family: "Poppins", sans-serif;
-    background-image: url("../../../../assets/fondos/backlogin.gif");
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-    position: fixed;
-    height: 100%;
-    width: 100%;
-  }
-  
-  .titulo-ahorcado {
-    text-align: center;
-    color: white;
-    text-shadow: 2px 2px 2px black;
-    font-weight: bold;
-    width: max-content;
-    font-size: 50px;
-    display: block;
-    margin: 0 auto;
-    background-color: #3d4068;
-    padding: 5px 15px;
-    margin-top: 0.5rem;
-    box-shadow: 0 0 20px #181b33;
-    margin-top: 50px;
-    margin-bottom: 1rem;
-    border-radius: 45px;
-  }
-  
-  .palabra-adivinar {
-    text-align: center;
-    color: white;
-    text-shadow: 2px 2px 2px black;
-    font-weight: bold;
-    font-size: 2rem;
-    margin-bottom: 1rem;
-    display: block;
-    background-color: #3d4068;
-    border-radius: 20px;
-    width: max-content;
-    margin: 0 auto;
-    margin-top: 20px;
-    padding-bottom: 10px;
-    padding-top: 5px;
-    transform: translateY(-20%);
-  }
-  
-  .intentos {
-    text-align: center;
-    color: white;
-    text-shadow: 2px 2px 2px black;
-    font-weight: bold;
-  }
-  
-  .puntaje {
-    font-size: 1rem;
-  }
-  
+.background-image {
+  position: fixed;
+  z-index: -1;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image:linear-gradient(to top, transparent 10%, rgba(0, 0, 0, 0.5) 50%, rgba(0, 0, 0) 95%),url('../../../../assets/fondos/backlogin.jpg');
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.contenedor-botones {
+  padding-top: 5rem;
+}
+
+.col{
+  background-color: rgba(118, 54, 124, 0.466);
+}
+
+.titulo-ahorcado {
+  text-align: center;
+  color: aqua;
+  text-shadow: 2px 2px 2px black;
+  font-weight: bold;
+  width: max-content;
+  display: block;
+  margin: 0 auto;
+  margin-top: 80px;
+  margin-bottom: 1rem;
+}
+
+.palabra-adivinar {
+  text-align: center;
+  color: white;
+  text-shadow: 2px 2px 2px black;
+  font-weight: bold;
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.intentos {
+  text-align: center;
+  color: aqua;
+  text-shadow: 2px 2px 2px black;
+  font-weight: bold;
+}
+
+.puntaje {
+  font-size: 1rem;
+  color: aqua;
+}
+
+.img-horca {
+  width: 25rem;
+  display: block;
+  margin: 1rem auto;
+  box-shadow: 0 0 16px rgb(128, 35, 128);
+  border-radius: 20px;
+}
+
+.btn-letra {
+  padding: 1em 2em;
+  font-size: 12px;
+  font-weight: 500;
+  color: #000;
+  background-color: #fff;
+  border: none;
+  border-radius: 45px;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease 0s;
+  cursor: pointer;
+  outline: none;
+  margin-bottom: 0.5rem;
+}
+
+.btn-letra:hover {
+  background-color: #7a3bb4;
+  box-shadow: 0px 15px 20px rgba(196, 2, 255, 0.8);
+  color: #fff;
+  transform: translateY(-7px);
+}
+
+.btn-letra:active {
+  transform: translateY(-1px);
+}
+
+
+.btn-reiniciar {
+  padding: 1.3em 3em;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 2.5px;
+  font-weight: 500;
+  color: rgb(255, 255, 255);
+  background-color: rgb(146, 19, 158);
+  border: none;
+  border-radius: 45px;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease 0s;
+  cursor: pointer;
+  outline: none;
+  display: block;
+  margin: 0 auto 0.5rem auto;
+}
+
+.btn-reiniciar:hover {
+  background-color: #161718;
+  box-shadow: 0px 15px 20px rgba(138, 171, 201, 0.4);
+  color: #fff;
+  transform: translateY(-7px);
+}
+
+.btn-reiniciar:active {
+  transform: translateY(-1px);
+}
+
+// Responsive
+@media screen and (max-width: 480px) {
   .img-horca {
-    width: 28rem;
-    display: block;
-    margin: 1rem auto;
-    box-shadow: 0 0 40px #181b33;
-    border-radius: 20px;
+    width: 15rem;
   }
-  
+
+  .contenedor-botones {
+    padding-top: 1rem;
+  }
+
   .btn-letra {
-    padding: 1em 2em;
-    font-size: 12px;
-    font-weight: 500;
-    color: #000;
-    background-color: #9193c0;
-    border: none;
-    border-radius: 45px;
-    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease 0s;
-    cursor: pointer;
-    outline: none;
-    margin-bottom: 0.5rem;
+    padding: 0.7em 1.5em;
+    font-size: 9px;
+    font-weight: bolder;
   }
-  
-  .btn-acierto {
-    padding: 1em 2em;
-    font-size: 12px;
-    font-weight: 500;
-    color: #000;
-    background-color: #61c50f;
-    border: none;
-    border-radius: 45px;
-    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease 0s;
-    cursor: pointer;
-    outline: none;
-    margin-bottom: 0.5rem;
-  }
-  
-  .btn-error {
-    padding: 1em 2em;
-    font-size: 12px;
-    font-weight: 500;
-    color: #000;
-    background-color: #c5240f;
-    border: none;
-    border-radius: 45px;
-    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease 0s;
-    cursor: pointer;
-    outline: none;
-    margin-bottom: 0.5rem;
-  }
-  
-  .btn-letra:hover {
-    background-color: #bfc7ab;
-    box-shadow: 0px 15px 20px #bfc7ab;
-    color: #fff;
-    transform: translateY(-7px);
-  }
-  
-  .btn-letra:active {
-    transform: translateY(-1px);
-  }
-  
-  .btn-reiniciar {
-    padding: 1.3em 3em;
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 2.5px;
-    font-weight: 500;
-    color: rgb(255, 255, 255);
-    background-color: #3d4068;
-    border: none;
-    border-radius: 45px;
-    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.807);
-    transition: all 0.3s ease 0s;
-    cursor: pointer;
-    outline: none;
-    display: block;
-    margin: 0 auto 1rem auto;
-  }
-  
-  .btn-reiniciar:hover {
-    background-color: #161718;
-    box-shadow: 0px 15px 20px rgba(138, 171, 201, 0.4);
-    color: #fff;
-    transform: translateY(-7px);
-  }
-  
-  .btn-reiniciar:active {
-    transform: translateY(-1px);
-  }
-  
-  @media screen and (max-width: 480px) {
-    .img-horca {
-      width: 15rem;
-    }
-  
-    .contenedor-botones {
-      padding-top: 1rem;
-    }
-  
-    .btn-letra {
-      padding: 0.7em 1.5em;
-      font-size: 9px;
-      font-weight: bolder;
-    }
-  }
+}

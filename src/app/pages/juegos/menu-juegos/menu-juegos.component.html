@@ -1,27 +1,82 @@
-<section class="container" style="display: flex; height: 100%;width: 100%; position: fixed;">
-    <div class="sections">
-      <div class="card">
-        <img src="../../../../assets/ahorcado/ahorcado_3.png" alt="Ahorcado">
-        <div class="card-body">
+<section class="background-image">
+  <div class="container">
+    <h2 class="titulo">LISTADO DE JUEGOS</h2>
+    <div class="row row-cols-1 row-cols-md-4">
+      <div class="col">
+        <div class="card">
           <h5 class="card-title">Ahorcado</h5>
-          <p class="card-text">
-            Adivina la palabra letra por letra antes de que se complete el ahorcado. Cada error te acerca más a
-            perder el juego.
-          </p>
-          <a [routerLink]="['ahorcado']" class="btn btn-primary btn-juegos">JUGAR</a>
+          <img
+            src="../../../../assets/ahorcado/ahorcado_4_vic.png"
+            class="card-img-top"
+            alt="..."
+          />
+          <div class="card-body">
+            <p class="card-text">
+              El juego consiste en encontrar la palabra letra por
+              letra antes de que se complete el cuerpo del ahorcado. ¡Salvalo!
+            </p>
+            <a routerLink="ahorcado" class="btn btn-primary btn-juego swing"
+              >JUGAR</a
+            >
+          </div>
         </div>
       </div>
-  
-      <div class="card">
-        <img src="../../../../assets/ahorcado/ahorcado_3.png" alt="Mayor-Menor">
-        <div class="card-body">
+      <div class="col">
+        <div class="card">
           <h5 class="card-title">Mayor o Menor</h5>
-          <p class="card-text">
-            Adivina si la próxima carta será mayor o menor que la carta actual. Pon a prueba tu intuición y habilidades de
-            predicción
-          </p>
-          <a [routerLink]="['mayor-menor']" class="btn btn-primary btn-juegos">JUGAR</a>
+          <img
+            src="../../../../assets/fondos/mayormenorgame.png"
+            class="card-img-top"
+            alt="..."
+          />
+          <div class="card-body">
+            <p class="card-text">
+              Adivina si la próxima carta será mayor o menor que la carta actual. ¡Consigue al menos 3 puntos para ganar!
+            </p>
+            <a routerLink="mayormenor" class="btn btn-primary btn-juego swing"
+              >JUGAR</a
+            >
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card">
+          <h5 class="card-title">Preguntados</h5>
+          <img
+            src="../../../../assets/fondos/underConstruct.jpg"
+            class="card-img-top"
+            alt="..."
+          />
+          <div class="card-body">
+            <p class="card-text">
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+               Id voluptates rem fuga tempora! Eveniet laborum sequi blanditiis.
+            </p>
+            <a href="#" class="btn btn-primary btn-center swing">JUGAR</a>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card">
+          <h5 class="card-title">¿puzzle/Buscaminas?</h5>
+          <img
+            src="../../../../assets/fondos/underConstruct.jpg"
+            class="card-img-top"
+            alt="..."
+          />
+          <div class="card-body">
+            <p class="card-text">
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+               Pariatur voluptatum eos necessitatibus. Quisquam ex fugit dolor,
+                dolorem unde libero aut mollitia veritatis alias. Error molestiae
+                 tenetur minima, nihil autem praesentium sint possimus iure dolorem fuga?
+                  Unde, dolore! Porro ipsum, optio rerum quia fuga natus sapiente deleniti,
+                   officiis quasi ea at.
+            </p>
+            <a href="#" class="btn btn-primary btn-juego swing">JUGAR</a>
+          </div>
         </div>
       </div>
     </div>
+  </div>
 </section>
