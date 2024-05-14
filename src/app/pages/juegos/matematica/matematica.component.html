@@ -1,0 +1,26 @@
+<div class="matematicas-container">
+    <div class="container">
+        <h1 class="titulo">Destreza Matematica</h1>
+        <div *ngIf="juegoActivo" class="operacion-container">
+            <p class="numero-1">{{a}}</p>
+            <p class="operacion">{{operador}}</p>
+            <p class="numero-2">{{b}}</p>
+        </div>
+        <div *ngIf="juegoActivo || juegoFinalizado" class="puntuacion-container">
+            <span class="puntuacion">Puntuación: {{ puntuacion }}</span>
+            <span class="intentos">Tiempo: {{ tiempo }}</span>
+        </div>
+        <div *ngIf="juegoFinalizado">
+            <p class="juego-terminado" [ngClass]="victoria ? 'victoria' : 'derrota'">
+            {{ textoJuegoFinalizado }}
+          </p>
+        </div>
+        <div *ngIf="juegoActivo" class="opciones-container">
+            <button class="btn-opcion" *ngFor="let respuesta of opciones" (click)="Resolver(respuesta, $event)"
+                [ngClass]="respuestaCorrecta ? 'correcta' : ''" [ngClass]="respuestaIncorrecta ? 'incorrecta' : ''">
+                {{ respuesta }}
+            </button>
+        </div>
+        <button *ngIf="!juegoActivo" class="btn btn-comenzar" (click)="IniciarJuego()">{{textoBotonJuego}}</button>
+    </div>
+</div>

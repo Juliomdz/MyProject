@@ -9,7 +9,7 @@
 
 .titulo-mayormenor {
   text-align: center;
-  color: white;
+  color: aquamarine;
   text-shadow: 2px 2px 2px black;
   font-weight: bold;
   width: max-content;
@@ -17,26 +17,26 @@
   display: block;
   margin: 0 auto;
   padding: 5px 15px;
-  margin-top: 0.5rem;
-  margin-top: 50px;
   margin-bottom: 1rem;
   border-radius: 45px;
 }
 
 .puntuacion {
   text-align: center;
-  color: #000000;
+  color: aquamarine;
   font-size: 2rem;
-  text-shadow: 1px 1px 1px rgb(255, 255, 255);
+  margin-top: -2rem;
+  text-shadow: 1px 1px 1px rgb(0, 0, 0);
   font-weight: bold;
 }
 
 .intentos {
-  color: #000000;
+  color: aquamarine;
   margin-left: 8rem;
-  text-shadow: 1px 1px 1px rgb(255, 255, 255);
+  text-shadow: 1px 1px 1px rgb(5, 4, 4);
   font-weight: bold;
   font-size: 2rem;
+  margin-top: -2rem;
 }
 
 .row {
@@ -46,18 +46,21 @@
 .carta-izquierda {
   width: 20rem;
   margin-right: 15px;
+  margin-top: -2rem;
   box-shadow: 0 0 20px #043624;
 }
 
 .carta-derecha {
   width: 20rem;
   margin-left: 15px;
+  margin-top: -2rem;
   box-shadow: 0 0 20px #043624;
 }
 
 .btn-mayormenor {
   display: block;
   margin: 0.5rem auto;
+  margin-top: -1rem;
 }
 
 @media screen and (max-width: 500px) {

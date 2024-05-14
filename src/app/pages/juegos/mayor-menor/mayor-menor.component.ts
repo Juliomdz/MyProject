@@ -58,10 +58,23 @@ export class MayorMenorComponent {
     { type: 'corazon', number: 11 },
     { type: 'corazon', number: 12 },
     { type: 'corazon', number: 13 },
+    { type: 'picas', number: 1 },
+    { type: 'picas', number: 2 },
+    { type: 'picas', number: 3 },
+    { type: 'picas', number: 4 },
+    { type: 'picas', number: 5 },
+    { type: 'picas', number: 6 },
+    { type: 'picas', number: 7 },
+    { type: 'picas', number: 8 },
+    { type: 'picas', number: 9 },
+    { type: 'picas', number: 10 },
+    { type: 'picas', number: 11 },
+    { type: 'picas', number: 12 },
+    { type: 'picas', number: 13 },
   ];
   cartasAAdivinar: any = [];
   puntuacion: number = 0;
-  intentos: number = 10;
+  intentos: number = 52;
   currentCard: any = null;
   currentNumber: number = 0;
   indiceActual: number = 0;
@@ -83,7 +96,7 @@ export class MayorMenorComponent {
   }
 
   IniciarJuego() {
-    this.intentos = 10;
+    this.intentos = 52;
     this.victoria = false;
     this.juegoActivado = true;
     this.juegoFinalizado = false;
@@ -92,7 +105,7 @@ export class MayorMenorComponent {
     this.indiceActual = 0;
     this.botonJuego = 'Reiniciar Juego';
     this.cardList.sort(() => Math.random() - 0.5);
-    this.cartasAAdivinar = this.cardList.slice(0, 11);
+    this.cartasAAdivinar = this.cardList.slice(0, 52);
     this.currentCard = this.cartasAAdivinar[this.indiceActual];
     this.currentNumber = this.currentCard.number;
     this.imagenCarta = `/assets/mayor-menor/${this.currentCard.type}_${this.currentCard.number}.png`;
@@ -115,7 +128,7 @@ export class MayorMenorComponent {
             'Mayor o Menor'
           );
         } else if (previousNumber === this.currentNumber) {
-          this.intentos++;
+          //this.intentos++;
           this.notifyService.showInfo('Las cartas son iguales', 'Mayor o Menor');
         } else {
           this.notifyService.showError('No acertaste', 'Mayor o Menor');
@@ -129,7 +142,7 @@ export class MayorMenorComponent {
             'Mayor o Menor'
           );
         } else if (previousNumber === this.currentNumber) {
-          this.intentos++;
+          //this.intentos++;
           this.notifyService.showInfo('Las cartas son iguales', 'Mayor o Menor');
         } else {
           this.notifyService.showError('No acertaste', 'Mayor o Menor');
@@ -137,7 +150,7 @@ export class MayorMenorComponent {
         break;
     }
 
-    if (this.indiceActual === 10) {
+    if (this.indiceActual === 52) {
       this.juegoActivado = false;
       this.juegoFinalizado = true;
       if (this.puntuacion >= 3) {

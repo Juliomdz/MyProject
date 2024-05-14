@@ -1,0 +1,30 @@
+<section class="preguntados-container">
+    <div class="container">
+      <h1 class="titulo-preguntados">PREGUNTADOS</h1>
+      <p class="puntuacion">
+        Puntuación: {{ puntuacion }}
+        <span class="intentos">(Intentos: {{ intentos }}/10)</span>
+      </p>
+      <div class="row" *ngIf="preguntasCargadas">
+        <div class="contendor-bandera col">
+          <img src="{{ preguntaActual.flag }}" alt="bandera" />
+        </div>
+        <div class="contenedor-pregunta col">
+          <h3 *ngIf="juegoActivo">¿De qué país es la bandera?</h3>
+          <p class="juego-terminado" [ngClass]="victoria ? 'victoria' : 'derrota'" *ngIf="juegoFinalizado">{{ textoJuegoFinalizado }}
+          </p>
+          <div *ngIf="juegoActivo">
+            <button class="btn-opcion"
+              *ngFor="let option of preguntaActual.options"
+              (click)="SeleccionOpcion(option, $event)" [ngClass]="respuestaCorrecta ? 'correcta' : ''" [ngClass]="respuestaIncorrecta ? 'incorrecta' : ''">{{ option }}
+            </button>
+          </div>
+          <div *ngIf="!juegoActivo">
+            <button class="btn-reiniciar" (click)="ReiniciarJuego()">
+              Reiniciar Juego
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
